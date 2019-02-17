@@ -1,0 +1,27 @@
+{
+  "name": "react_visualizer_challenge",
+  "version": "1.0.0",
+  "description": "Data Visualization for Google coding challenge.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JSitter/react_visualizer_challenge.git"
+  },
+  "keywords": [
+    "d3",
+    "React",
+    "TypeScript",
+    "visualizer"
+  ],
+  "author": "Justin Sitter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JSitter/react_visualizer_challenge/issues"
+  },
+  "homepage": "https://github.com/JSitter/react_visualizer_challenge#readme",
+  "devDependencies": {
+  }
+}
