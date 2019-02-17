@@ -4,7 +4,7 @@
   "description": "Data Visualization for Google coding challenge.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,5 @@
     "url": "https://github.com/JSitter/react_visualizer_challenge/issues"
   },
   "homepage": "https://github.com/JSitter/react_visualizer_challenge#readme",
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
