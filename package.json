@@ -22,5 +22,16 @@
     "url": "https://github.com/JSitter/react_visualizer_challenge/issues"
   },
   "homepage": "https://github.com/JSitter/react_visualizer_challenge#readme",
-  "devDependencies": {}
+  "devDependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "react": "^16.8.2",
+    "react-dom": "^16.8.2",
+    "webpack": "^4.29.4",
+    "webpack-cli": "^3.2.3"
+  }
 }
