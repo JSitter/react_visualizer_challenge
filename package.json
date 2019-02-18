@@ -37,6 +37,7 @@
     "webpack-cli": "^3.2.3"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "react-router-dom": "^4.3.1"
   }
 }
