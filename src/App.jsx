@@ -10,6 +10,7 @@ class App extends Component {
     );
   };
 };
+
 export default App;
 let appBody = document.getElementById("app-body");
 appBody ? ReactDOM.render(<App/>, appBody) : false;
