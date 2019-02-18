@@ -14,14 +14,51 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      url : ""
+      'fetching': false,
+      cur_data : {}
     };
     this.updateUrl = this.updateUrl.bind(this);
 
     };
+  
+  fetchData(url){
+    this.setState({'fetching': true})
+    // Get Data from *Hopefully* Google Servers
+    fetch(url)
+    .then((response)=>{
+      if (response.status != 200){
+        console.log('There was an error: ', response.status);
+        this.setState({'fetching': false})
+        return;
+      }
 
+      response.json().then((data)=>{
+        this.setState({
+          cur_data: data,
+          'fetching': false
+        })
+        
+      });
+    })
+    .catch((err)=>this.setState({
+      cur_data: err,
+      'fetching': false
+    }));
+
+  }
+  
+  // Refactor this function to reflect the url fetching nature....
   updateUrl(url){
-    this.setState({url});
+
+    // Switch on given route
+    if( url == "emissions" ){
+      this.fetchData('https://storage.googleapis.com/gweb-dat-coding-challenge-data-sources/global_temp_time_series_annual.json');
+       
+    } else if( url == "population" ){
+      this.fetchData('https://storage.googleapis.com/gweb-dat-coding-challenge-data-sources/global_historical_population.json')
+    } else if( url == "temperatures"){
+      this.fetchData('https://storage.googleapis.com/gweb-dat-coding-challenge-data-sources/global_temp_time_series_annual.json')
+    }
   };
 
   render(){
@@ -36,7 +73,7 @@ class App extends Component {
           <Route path="/population" component={PopulationGraph} />
           <Route path="/temperatures" component={TemperatureGraph} />
 
-          <section id="debug">Url: {this.state.url}</section>
+          <section id="debug">Url Return: {JSON.stringify(this.state.cur_data)}</section>
         </section>
       </BrowserRouter>
     );
