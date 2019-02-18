@@ -17,10 +17,14 @@ class App extends Component {
       'fetching': false,
       cur_data : {}
     };
-    this.updateUrl = this.updateUrl.bind(this);
+    this.getUrl = this.getUrl.bind(this);
 
     };
   
+  parseEmissions(){
+
+  }
+
   fetchData(url){
     this.setState({'fetching': true})
     // Get Data from *Hopefully* Google Servers
@@ -47,13 +51,11 @@ class App extends Component {
 
   }
   
-  // Refactor this function to reflect the url fetching nature....
-  updateUrl(url){
+  getUrl(url){
 
     // Switch on given route
     if( url == "emissions" ){
-      this.fetchData('https://storage.googleapis.com/gweb-dat-coding-challenge-data-sources/global_temp_time_series_annual.json');
-       
+      this.fetchData('https://storage.googleapis.com/gweb-dat-coding-challenge-data-sources/global_co2_emissions_from_fossil_fuels.json');
     } else if( url == "population" ){
       this.fetchData('https://storage.googleapis.com/gweb-dat-coding-challenge-data-sources/global_historical_population.json')
     } else if( url == "temperatures"){
@@ -65,7 +67,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <section>
-          <Nav updateUrl={this.updateUrl}/>
+          <Nav getUrl={this.getUrl}/>
           
           
           <Route exact path="/" component={Introduction} />
