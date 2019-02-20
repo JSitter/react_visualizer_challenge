@@ -20,10 +20,6 @@ class App extends Component {
     this.getUrl = this.getUrl.bind(this);
 
     };
-  
-  parseEmissions(){
-
-  }
 
   fetchData(url){
     this.setState({'fetching': true})
@@ -48,11 +44,9 @@ class App extends Component {
       cur_data: err,
       'fetching': false
     }));
-
   }
   
   getUrl(url){
-
     // Switch on given route
     if( url == "emissions" ){
       this.fetchData('https://storage.googleapis.com/gweb-dat-coding-challenge-data-sources/global_co2_emissions_from_fossil_fuels.json');
@@ -69,13 +63,12 @@ class App extends Component {
         <section>
           <Nav getUrl={this.getUrl}/>
           
-          
           <Route exact path="/" component={Introduction} />
-          <Route path="/emissions" component={EmissionGraph} />
-          <Route path="/population" component={PopulationGraph} />
-          <Route path="/temperatures" component={TemperatureGraph} />
+          <Route path="/emissions" render={() => <EmissionGraph emissionData={this.state.cur_data}/>} />
+          <Route path="/population" render={() => <PopulationGraph popData={this.state.cur_data}/>} />
+          <Route path="/temperatures" render={() => <TemperatureGraph tempData={this.state.cur_data}/>} />
 
-          <section id="debug">Url Return: {JSON.stringify(this.state.cur_data)}</section>
+          {/* <section id="debug">Url Return: {JSON.stringify(this.state.cur_data)}</section> */}
         </section>
       </BrowserRouter>
     );
