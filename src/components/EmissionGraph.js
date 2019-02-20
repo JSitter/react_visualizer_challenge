@@ -11,7 +11,7 @@ class EmissionGraph extends Component {
     return (
       <section id="main">
         <h2>Emissions</h2>
-        <LineChart emissionData={this.props.emissionData} xSize={800} ySize={800} xAxisText={'Total Carbon in Birds per Second'}/>
+        <LineChart emissionData={this.props.emissionData} xSize={800} ySize={800} xAxisText={'Total Carbon in Something per Hour'}/>
       </section>
     )
   }
