@@ -65,7 +65,7 @@ class App extends Component {
           
           <Route exact path="/" component={Introduction} />
           <Route path="/emissions" render={() => <EmissionGraph emissionData={this.state.cur_data}/>} />
-          <Route path="/population" render={() => <PopulationGraph popData={this.state.cur_data}/>} />
+          <Route path="/population" render={() => <PopulationGraph populationData={this.state.cur_data}/>} />
           <Route path="/temperatures" render={() => <TemperatureGraph tempData={this.state.cur_data}/>} />
 
           {/* <section id="debug">Url Return: {JSON.stringify(this.state.cur_data)}</section> */}
