@@ -32,7 +32,7 @@ class PopulationGraph extends Component {
   cleanData(){
     let data = this.props.populationData;
     let xColumnName = 'Year';
-    let yColumnName = 'Average';
+    let yColumnName = 'Deevey';
     // Remove NaN's from Dataset
     let filteredData = []
     if (data.length>0){
@@ -49,7 +49,7 @@ class PopulationGraph extends Component {
     return (
       <section id="main">
         <h2>Population over Time</h2>
-        <LineChart data={this.state.filteredData} xSize={1200} ySize={600} xAxisText={'Total People in Something per Hour'}/>
+        <LineChart data={this.state.filteredData} xSize={1200} ySize={400} xAxisText={'Number of People in Millions'}/>
       </section>
     );
   };
