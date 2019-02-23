@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { select, scaleLinear, line, extent , axisBottom, axisLeft, min, max} from 'd3';
+import { select, scaleLinear, line, extent , axisBottom, axisLeft, min, max, nest, parseTime} from 'd3';
 
 class LineChart extends Component {
    constructor(props){
@@ -17,16 +17,9 @@ class LineChart extends Component {
 
    createLineChart(svgWidth, svgHeight) {
 
-      let data = this.props.emissionData;
+      let df = this.props.data
 
-      // Remove NaN's from Dataset
-      let filteredData = []
-      if (data.length>0){
-         data.forEach((d)=>{
-            if (!isNaN(d.Year) || !isNaN(d.Total))
-               filteredData.push(d)
-         })
-      }
+      console.log("Dataframe", df)
 
       // Set SVG Dimensions
       let margin = {top: 20, right: 20, bottom: 30, left: 50};
@@ -34,10 +27,8 @@ class LineChart extends Component {
       let height = svgHeight - margin.top - margin.bottom;
 
       // Data Range
-      let xRange = extent(filteredData, (d) => { return d.Year });
-      let yRange = extent(filteredData, (d) => { return d.Total });
-
-
+      let xRange = extent(df, (d) => { return d.X });
+      let yRange = extent(df, (d) => { return d.Y });
 
       // Set SVG Size
       let svg = select('svg')
@@ -54,12 +45,12 @@ class LineChart extends Component {
       let x = scaleLinear().rangeRound([0, width]);
       let y = scaleLinear().rangeRound([height, 0]);
 
-      y.domain(yRange, (d)=>{ return d.Total });
-      x.domain(xRange, (d)=>{ return d.Year });
+      y.domain(yRange, (d)=>{ return d.Y });
+      x.domain(xRange, (d)=>{ return d.X });
 
       let lineGenerator = line()
-         .x(function(d){ return x(d.Year) })
-         .y(function(d){ return y(d.Total) });
+         .x(function(d){ return x(d.X) })
+         .y(function(d){ return y(d.Y) });
 
       g.append('g')
          .attr('transform', 'translate(0,' + height + ')')
@@ -78,7 +69,7 @@ class LineChart extends Component {
          .text(this.props.xAxisText);
 
       g.append('path')
-         .attr('d', lineGenerator(filteredData))
+         .attr('d', lineGenerator(df))
          .attr('fill', 'none')
          .attr('stroke', 'blue')
          .attr('stroke-linejoin', 'round')
