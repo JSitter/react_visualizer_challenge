@@ -9,7 +9,7 @@ class Nav extends Component {
     return (
         <nav>
     <div class="nav-wrapper">
-      <a href="#" class="brand-logo right">Logo</a>
+      <a href="#" class="brand-logo right"><Link to="/">Dataset Challenge</Link></a>
       <ul id="nav-mobile" class="left hide-on-med-and-down">
         <li onClick={()=>this.props.getUrl("emissions")}><Link to="/emissions">Emissions</Link></li>
         <li onClick={()=>this.props.getUrl("population")}><Link to="/population">Population</Link></li>
