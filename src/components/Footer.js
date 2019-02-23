@@ -14,9 +14,9 @@ class Footer extends Component {
               <div class="col l4 offset-l2 s12">
                 <h5 class="white-text">Data Visualizations</h5>
                 <ul>
-                  <li><a class="grey-text text-lighten-3" href="#!"><Link to="/emissions">Global Emissions</Link></a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!"><Link to="/population">Historical Population</Link></a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!"><Link to="/temperatures">Global Temperatures</Link></a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!" onClick={()=>this.props.getUrl("emissions")}><Link to="/emissions">Global Emissions</Link></a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!" onClick={()=>this.props.getUrl("population")}><Link to="/population">Historical Population</Link></a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!" onClick={()=>this.props.getUrl("temperatures")}><Link to="/temperatures">Global Temperatures</Link></a></li>
                 </ul>
               </div>
             </div>
