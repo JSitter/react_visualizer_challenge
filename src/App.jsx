@@ -7,6 +7,11 @@ import Introduction from './components/Introduction';
 import Nav from './components/Nav';
 import PopulationGraph from './components/PopulationGraph';
 import TemperatureGraph from './components/TemperatureGraph';
+import IntroductionHeader from './components/IntroductionHeader';
+import EmissionHeader from './components/EmissionHeader';
+import PopulationHeader from './components/PopulationHeader';
+import TemperatureHeader from './components/TemperatureHeader';
+import Footer from './components/Footer';
 
 import './css/style.css';
 
@@ -36,7 +41,7 @@ class App extends Component {
         this.setState({
           cur_data: data,
           'fetching': false
-        })
+        });
         
       });
     })
@@ -59,18 +64,25 @@ class App extends Component {
 
   render(){
     return (
-      <BrowserRouter>
-        <section>
-          <Nav getUrl={this.getUrl}/>
-          
-          <Route exact path="/" component={Introduction} />
-          <Route path="/emissions" render={() => <EmissionGraph emissionData={this.state.cur_data}/>} />
-          <Route path="/population" render={() => <PopulationGraph populationData={this.state.cur_data}/>} />
-          <Route path="/temperatures" render={() => <TemperatureGraph tempData={this.state.cur_data}/>} />
+        <BrowserRouter>
+          <section>
+            <Route exact path="/" component={IntroductionHeader} />
+            <Route path="/emissions" component={ EmissionHeader } />
+            <Route path="/population" component={ PopulationHeader } />
+            <Route path="/temperatures" component={ TemperatureHeader } />
+            <Nav getUrl={this.getUrl}/>
+            
+            <Route exact path="/" component={Introduction} />
+            <Route path="/emissions" render={() => <EmissionGraph emissionData={this.state.cur_data} graphWidth={window.innerWidth - 75} graphHeight={window.innerWidth / 2}/>}/>
 
-          {/* <section id="debug">Url Return: {JSON.stringify(this.state.cur_data)}</section> */}
-        </section>
-      </BrowserRouter>
+            <Route path="/population" render={() => <PopulationGraph populationData={this.state.cur_data} graphWidth={window.innerWidth - 75} graphHeight={window.innerWidth / 2}/>} />
+
+            <Route path="/temperatures" render={() => <TemperatureGraph temperatureData={this.state.cur_data} graphWidth={window.innerWidth - 75} graphHeight={window.innerWidth / 2}/>} />
+
+            {/* <section id="debug">Url Return: {JSON.stringify(this.state.cur_data)}</section> */}
+            <Footer getUrl={this.getUrl}/>
+          </section>
+        </BrowserRouter>
     );
   };
 };
