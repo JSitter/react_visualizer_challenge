@@ -5,10 +5,16 @@ class EmissionGraph extends Component {
   constructor(props){
     super(props);
     this.state = {
-      'filteredData': []
+      'filteredData': [],
+      'windowWidth': 300
     };
     this.firstElement = {};
  };
+
+  componentWillMount(){
+    this.setState({'windowWidth': window.Width})
+    console.log(window.Width)
+  }
 
   componentDidUpdate(){
 
@@ -47,7 +53,7 @@ class EmissionGraph extends Component {
     return (
       <section id="main">
         <h2>Emissions</h2>
-        <LineChart data={this.state.filteredData} xSize={1200} ySize={400} xAxisText={'Total Carbon in Million Metric Tons'}/>
+        <LineChart data={this.state.filteredData} xSize={this.props.graphWidth} ySize={this.props.graphHeight} xAxisText={'Total Carbon in Million Metric Tons'}/>
       </section>
     );
   };
