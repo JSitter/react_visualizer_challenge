@@ -30,4 +30,4 @@ Clear, readable, and maintainable code is always a priority when creating a proj
 
 Part of the process of creating clear code happens when you use the proper tools that are given to you. Promises allow for greater clarity by removing the need for nested callback functions and the required error handling that goes along with it. Because of this Javascript promises were used whenever possible to keep code clean and readable.
 
-The largest part of my developement process was focused on learning and using D3. This  slowed my process down considerably though it was a great learning opportunity and will allow me to use D3 in future projects with little issue.
+The largest part of my development process was focused on learning and using D3. This  slowed my process down considerably though it was a great learning opportunity and will allow me to use D3 in future projects with little issue.
