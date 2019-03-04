@@ -5,7 +5,8 @@ class Introduction extends Component {
     return (
       <section id="main">
         <h2>Introduction</h2>
-        <p>These datasets are meant to be a visualized look at certain API endpoints.</p>
+        <p>This application is meant visualize certain datasets provided by Google.</p>
+        <p>This visualization shows historical global temperature data, population, and carbon emission data.</p>
       </section>
     )
   }
