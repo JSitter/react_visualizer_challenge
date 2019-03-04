@@ -32,3 +32,7 @@ npm start
 ```
 
 To start a local development or production version of the project.
+
+The Sample deployed Application is hosted on Heroku's Free tier and may take bit of time to wake up. Visit the web app at: 
+
+https://google-react-visualizer.herokuapp.com/
