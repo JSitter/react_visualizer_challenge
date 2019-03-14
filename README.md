@@ -23,7 +23,7 @@ to build the project.
 
 ## Running The Build
 
-After the code is transpiled is is ready to be served. 
+After the code is transpiled, it is ready to be served. 
 
 Use the command:
 
