@@ -53,7 +53,12 @@ class EmissionGraph extends Component {
     return (
       <section id="main">
         <h2>Emissions</h2>
-        <LineChart data={this.state.filteredData} xSize={this.props.graphWidth} ySize={this.props.graphHeight} xAxisText={'Total Carbon in Million Metric Tons'}/>
+        <LineChart 
+          data={this.state.filteredData} 
+          xSize={this.props.graphWidth} 
+          ySize={this.props.graphHeight} 
+          xAxisText={'Total Carbon in Million Metric Tons'}
+        />
       </section>
     );
   };

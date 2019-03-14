@@ -49,7 +49,12 @@ class PopulationGraph extends Component {
     return (
       <section id="main">
         <h2>Population over Time</h2>
-        <LineChart data={this.state.filteredData} xSize={this.props.graphWidth} ySize={this.props.graphHeight} xAxisText={'Number of People in Millions'}/>
+        <LineChart 
+          data={this.state.filteredData} 
+          xSize={this.props.graphWidth} 
+          ySize={this.props.graphHeight} 
+          xAxisText={'Number of People in Millions'}
+        />
       </section>
     );
   };
