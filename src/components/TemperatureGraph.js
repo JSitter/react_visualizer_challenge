@@ -54,6 +54,7 @@ class TemperatureGraph extends Component {
           xSize={this.props.graphWidth} 
           ySize={this.props.graphHeight} 
           xAxisText={'Average global mean temperature anomalies'}
+          time-plot={true}
         />
       </section>
     )
