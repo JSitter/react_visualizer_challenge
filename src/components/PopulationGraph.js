@@ -36,12 +36,6 @@ class PopulationGraph extends Component {
     let yColumnName = 'Average';
     // Remove NaN's from Dataset
     let filteredData = []
-    // if (data.length>0){
-    //    data.forEach((d)=>{
-    //       if (d[xColumnName] || d[yColumnName])
-    //          filteredData.push({'X':d[xColumnName], 'Y':d[yColumnName]});
-    //    });
-    // };
 
     data.filter(row => {
       if ((!isNaN(row.Average) && !isNullOrUndefined(row.Average)) && ( row.Year != '0'))
