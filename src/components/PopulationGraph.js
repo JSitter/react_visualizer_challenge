@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import LineChart from './LineChart';
+import { isNullOrUndefined } from 'util';
 
 class PopulationGraph extends Component {
   constructor(props){
@@ -32,16 +33,22 @@ class PopulationGraph extends Component {
   cleanData(){
     let data = this.props.populationData;
     let xColumnName = 'Year';
-    let yColumnName = 'Deevey';
+    let yColumnName = 'Average';
     // Remove NaN's from Dataset
     let filteredData = []
-    if (data.length>0){
-       data.forEach((d)=>{
-          if (!isNaN(d[xColumnName]) || !isNaN(d[yColumnName]))
-             filteredData.push({'X':d[xColumnName], 'Y':d[yColumnName]});
-       });
-    };
+    // if (data.length>0){
+    //    data.forEach((d)=>{
+    //       if (d[xColumnName] || d[yColumnName])
+    //          filteredData.push({'X':d[xColumnName], 'Y':d[yColumnName]});
+    //    });
+    // };
 
+    data.filter(row => {
+      if ((!isNaN(row.Average) && !isNullOrUndefined(row.Average)) && ( row.Year != '0'))
+        filteredData.push({'X':row[xColumnName], 'Y':row[yColumnName]})
+        
+    } );
+    console.log("Filtered Data: {}", filteredData);
     return filteredData;
   }
 
