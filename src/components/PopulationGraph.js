@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import LineChart from './LineChart';
 import { isNullOrUndefined } from 'util';
+import { isNull } from 'util';
 
 class PopulationGraph extends Component {
   constructor(props){
@@ -34,16 +35,28 @@ class PopulationGraph extends Component {
     let data = this.props.populationData;
     let xColumnName = 'Year';
     let yColumnName = 'Average';
-    // Remove NaN's from Dataset
-    let filteredData = []
 
-    data.filter(row => {
-      if ((!isNaN(row.Average) && !isNullOrUndefined(row.Average)) && ( row.Year != '0'))
-        filteredData.push({'X':row[xColumnName], 'Y':row[yColumnName]})
+    let filteredData = []
+    let lines = {}
+
+    let pilferedData = data.map(row => {
+      Object.keys(row).forEach((key)=>{
+        if (!(key == xColumnName) && !isNullOrUndefined(row[xColumnName]) && !isNaN(row[key]) && !isNullOrUndefined(row[key])){
+          
+            if (lines.hasOwnProperty(key)){
+              lines[key].push({'X':row[xColumnName], 'Y':row[key]})
+            }else{
+              lines[key] = [{'X':row[xColumnName], 'Y':row[key]}]
+            }
+        }
+      })
+      if ((!isNaN(row[xColumnName]) && !isNullOrUndefined(row[xColumnName])) && ( row[yColumnName] != '0'))
+        
+        return {'X':row[xColumnName], 'Y':row[yColumnName]}
         
     } );
-    console.log("Filtered Data: {}", filteredData);
-    return filteredData;
+    console.log("Line Data: {}", lines);
+    return lines['Average'];
   }
 
   render(){
