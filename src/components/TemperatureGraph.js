@@ -49,7 +49,13 @@ class TemperatureGraph extends Component {
     return (
       <section id="main">
         <h2>Temperature Over Time</h2>
-        <LineChart data={this.state.filteredData} xSize={this.props.graphWidth} ySize={this.props.graphHeight} xAxisText={'Average global mean temperature anomalies'}/>
+        <LineChart 
+          data={this.state.filteredData} 
+          xSize={this.props.graphWidth} 
+          ySize={this.props.graphHeight} 
+          xAxisText={'Average global mean temperature anomalies'}
+          time-plot={true}
+        />
       </section>
     )
   }

@@ -23,7 +23,7 @@ to build the project.
 
 ## Running The Build
 
-After the code is transpiled is is ready to be served. 
+After the code is transpiled, it is ready to be served. 
 
 Use the command:
 
@@ -32,3 +32,7 @@ npm start
 ```
 
 To start a local development or production version of the project.
+
+The Sample deployed Application is hosted on Heroku's Free tier and may take bit of time to wake up. Visit the web app at: 
+
+https://google-react-visualizer.herokuapp.com/
