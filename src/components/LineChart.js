@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { select, scaleLinear, scaleTime, line, extent , axisBottom, axisLeft, min, max, nest, time} from 'd3';
-import { timeFormat } from 'd3-time-format';
+import { select, scaleLinear, scaleTime, line, extent , axisBottom, axisLeft} from 'd3';
 
 class LineChart extends Component {
    constructor(props){
@@ -14,7 +13,6 @@ class LineChart extends Component {
 
    componentDidMount() {
       this.drawChart(this.props.xSize, this.props.ySize);
-      console.log("Mounted")
    }
 
    componentDidUpdate() {
@@ -22,7 +20,6 @@ class LineChart extends Component {
    }
 
    drawChart(xSize, ySize){
-      console.log("Console your fears")
       if ("time-plot" in this.props){
          this.createTimeSeriesChart(xSize, ySize);
       }else{
@@ -30,68 +27,44 @@ class LineChart extends Component {
       }
    }
 
-   createTimeSeriesChart(svgWidth, svgHeight){
-      let df = this.props.data
-
-      console.log("Dataframe", df)
-
-      // Set SVG Dimensions
-      let margin = {top: 20, right: 20, bottom: 30, left: 50};
-      let width = svgWidth - margin.left - margin.right;
-      let height = svgHeight - margin.top - margin.bottom;
-
-      
-      // Data Range
-      let xRange = extent(df, (d) => { return new Date(d.X, 1, 1) });
-      console.log("Xrange: ", xRange);
-      let yRange = extent(df, (d) => { return d.Y });
-
-      // Set SVG Size
-      let svg = select('svg')
+   drawSVG(svgWidth, svgHeight, margin, xRange, yRange){
+         // Set SVG Size
+         let svg = select('svg')
          .attr('width', svgWidth)
          .attr('height', svgHeight);
+      let height = svgHeight - margin.top + margin.bottom
+      let width = svgWidth - margin.left + margin.right
       
       // Add groups
       let g = svg.append('g')
          .attr('transform',
             'translate('+ margin.left + ',' + margin.top + ')'
          );
-      
-      // XY Scales
-      
-      let x = scaleTime();
-      x.domain(xRange);
-      x.range([0, width]);
-      
-      let y = scaleLinear().rangeRound([height, 0]);
 
-      
-      y.domain(yRange, (d)=>{ return d.Y });
-
-      let lineGenerator = line()
-         .x(function(d){ return x(new Date(d.X, 1, 1)) })
-         .y(function(d){ return y(d.Y) });
-     
-     
-
-         g.append('g')
+      g.append('g')
          .attr('transform', 'translate(0,' + height + ')')
-         .call(axisBottom(x))
+         .call(axisBottom(xRange))
          .select('.domain')
          .remove();
 
       g.append('g')
-         .call(axisLeft(y))
+         .call(axisLeft(yRange))
          .append('text')
          .attr('fill', '#888')
          .attr('transform', 'rotate(-90)')
          .attr('y', 5)
          .attr('dy', '0.9em')
          .attr('text-anchor', 'end')
-         .text(this.props.xAxisText);
+         .text('this.props.xAxisText');
+      return g
+   }
 
-      g.append('path')
-         .attr('d', lineGenerator(df))
+   addLines(g, df, lineGenerator){
+
+      g.selectAll('.line-path').data(df)
+         .enter().append('path')
+         .attr('class', 'line-path')
+         .attr('d', d => lineGenerator(d.value))
          .attr('fill', 'none')
          .attr('stroke', 'blue')
          .attr('stroke-linejoin', 'round')
@@ -99,69 +72,105 @@ class LineChart extends Component {
          .attr('stroke-width', 2);
    }
 
-   createLinearChart(svgWidth, svgHeight) {
+   createTimeSeriesChart(svgWidth, svgHeight){
+      let df = this.props.data;
 
-      let df = this.props.data
-
-      console.log("Dataframe", df)
+      if(df.length == 0){
+         return 0
+      }
 
       // Set SVG Dimensions
       let margin = {top: 20, right: 20, bottom: 30, left: 50};
       let width = svgWidth - margin.left - margin.right;
       let height = svgHeight - margin.top - margin.bottom;
 
+      // Find Data Range
+      let xRanges = [];
+      let yRanges = [];
       
-      // Data Range
-      let xRange = extent(df, (d) => { return d.X });
-      console.log("Xrange: ", xRange);
-      let yRange = extent(df, (d) => { return d.Y });
+      df.forEach((row)=>{
+         row.value.forEach(coords => {
+            xRanges.push(new Date(coords.X, 1, 1))
+            yRanges.push(coords.Y)
+         });
+      });
 
-      // Set SVG Size
-      let svg = select('svg')
-         .attr('width', svgWidth)
-         .attr('height', svgHeight);
+      let xRange = []
+      let yRange = []
+
+      if (xRanges.length > 0){
+         xRange = extent(xRanges);
+         yRange = extent(yRanges);
+      }
       
-      // Add groups
-      let g = svg.append('g')
-         .attr('transform',
-            'translate('+ margin.left + ',' + margin.top + ')'
-         );
+      // Set XY Scales
+      let x = scaleTime();
+      x.domain(xRange);
+      x.range(yRange);
+
+      let y = scaleLinear().rangeRound([height, 0]);
+      y.domain(yRange);
+
+      // Create line generator
+      let lineGenerator = line()
+      .x(function(d){ return x(new Date(d.X, 1, 1)); })
+      .y(function(d){ return y(d.Y); });
+
+      // Append Elements to DOM
+      let g = this.drawSVG(svgWidth, svgHeight, margin, x, y)
+      
+      this.addLines(g, df, lineGenerator);
+
+   }
+
+   createLinearChart(svgWidth, svgHeight) {
+      
+      let df = this.props.data;
+
+      if(df.length == 0){
+         return 0
+      }
+
+      // Set SVG Dimensions
+      let margin = {top: 20, right: 20, bottom: 30, left: 50};
+      let width = svgWidth - margin.left - margin.right;
+      let height = svgHeight - margin.top - margin.bottom;
+
+      // Data Range
+      let xRanges = [];
+      let yRanges = [];
+      
+      df.forEach((row)=>{
+         row.value.forEach(coords => {
+            xRanges.push(coords.X)
+            yRanges.push(coords.Y)
+         });
+      });
+
+      let xRange = []
+      let yRange = []
+
+      if (xRanges.length > 0){
+         xRange = extent(xRanges);
+         yRange = extent(yRanges);
+      }
+      
+      
       
       // XY Scales
       let x = scaleLinear().rangeRound([0, width]);
+      x.domain(xRange);
+
       let y = scaleLinear().rangeRound([height, 0]);
-
-      x.domain(xRange, (d)=>{ return d.X });
-      y.domain(yRange, (d)=>{ return d.Y });
-
+      y.domain(yRange);
+      
       let lineGenerator = line()
-         .x(function(d){ return x(d.X) })
-         .y(function(d){ return y(d.Y) });
-     
-     
-      g.append('g')
-         .attr('transform', 'translate(0,' + height + ')')
-         .call(axisBottom(x))
-         .select('.domain')
-         .remove();
+         .x(function(d){ return x(d.X); })
+         .y(function(d){ return y(d.Y); });
+      
+      let g = this.drawSVG(svgWidth, svgHeight, margin, x, y)
 
-      g.append('g')
-         .call(axisLeft(y))
-         .append('text')
-         .attr('fill', '#888')
-         .attr('transform', 'rotate(-90)')
-         .attr('y', 5)
-         .attr('dy', '0.9em')
-         .attr('text-anchor', 'end')
-         .text(this.props.xAxisText);
-
-      g.append('path')
-         .attr('d', lineGenerator(df))
-         .attr('fill', 'none')
-         .attr('stroke', 'blue')
-         .attr('stroke-linejoin', 'round')
-         .attr('stroke-linecap', 'round')
-         .attr('stroke-width', 2);
+      this.addLines(g, df, lineGenerator);
       
    }
 
