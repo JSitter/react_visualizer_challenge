@@ -27,6 +27,10 @@ svg {
   background-color: rgb(40, 76, 101);
 }
 
+.progress{
+  max-width: 70vw;
+}
+
 footer {
   background-color: rgb(29, 45, 57) !important;
   color: #999;
