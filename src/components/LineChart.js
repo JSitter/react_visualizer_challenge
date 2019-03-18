@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { select, scaleLinear, scaleTime, line, extent , axisBottom, axisLeft} from 'd3';
+import { select, scaleLinear, scaleTime, line, extent , axisBottom, axisLeft } from 'd3';
+
 
 class LineChart extends Component {
    constructor(props){
@@ -63,13 +64,27 @@ class LineChart extends Component {
    }
 
    addLines(g, df, lineGenerator){
+      var ColorScheme = require('color-scheme');
+ 
+      var scheme = new ColorScheme;
+      scheme.from_hue(21)         // Start the scheme 
+            .scheme('triade')     // Use the 'triade' scheme, that is, colors
+                                 // selected from 3 points equidistant around
+                                 // the color wheel.
+            .variation('soft');   // Use the 'soft' color variation
+      
+      var colors = scheme.colors();
 
+      console.log("DF", df)
+      console.log("Catogroy: ",  colors)
       g.selectAll('.line-path').data(df)
          .enter().append('path')
          .attr('class', 'line-path')
          .attr('d', d => lineGenerator(d.value))
          .attr('fill', 'none')
-         .attr('stroke', 'blue')
+         .attr('stroke', (d,i)=>{
+            return '#'+colors[i%colors.length]
+         })
          .attr('stroke-linejoin', 'round')
          .attr('stroke-linecap', 'round')
          .attr('stroke-width', 2);
@@ -116,7 +131,7 @@ class LineChart extends Component {
       let lineGenerator = line()
          .x(function(d){ return x(new Date(d.X, 1, 1)); })
          .y(function(d){ return y(d.Y); });
-      
+
       let g = this.drawSVG(svgWidth, svgHeight, margin, x, y)
       this.addLines(g, df, lineGenerator);
    }
@@ -165,7 +180,6 @@ class LineChart extends Component {
          .y(function(d){ return y(d.Y); });
       
       let g = this.drawSVG(svgWidth, svgHeight, margin, x, y)
-
       this.addLines(g, df, lineGenerator);
       
    }
