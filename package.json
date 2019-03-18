@@ -41,6 +41,7 @@
     "webpack-cli": "^3.2.3"
   },
   "dependencies": {
+    "color-scheme": "^1.0.1",
     "d3": "^5.9.1",
     "express": "^4.16.4",
     "react-router-dom": "^4.3.1"
