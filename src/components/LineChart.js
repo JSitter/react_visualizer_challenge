@@ -39,13 +39,16 @@ class LineChart extends Component {
       let g = svg.append('g')
          .attr('transform',
             'translate('+ margin.left + ',' + margin.top + ')'
-         );
+         )
+
+      let xScaleHeight = height - margin.bottom - margin.top - 7
 
       g.append('g')
-         .attr('transform', 'translate(0,' + height + ')')
-         .call(axisBottom(xRange))
-         .select('.domain')
-         .remove();
+         .attr('transform',
+         'translate(0,'+xScaleHeight+')'
+         )
+         .call(axisBottom(xRange)
+         .ticks(6));
 
       g.append('g')
          .call(axisLeft(yRange))
@@ -55,7 +58,7 @@ class LineChart extends Component {
          .attr('y', 5)
          .attr('dy', '0.9em')
          .attr('text-anchor', 'end')
-         .text('this.props.xAxisText');
+         .text(this.props.xAxisText);
       return g
    }
 
@@ -72,7 +75,7 @@ class LineChart extends Component {
          .attr('stroke-width', 2);
    }
 
-   createTimeSeriesChart(svgWidth, svgHeight){
+   createTimeSeriesChart(svgWidth, svgHeight){   
       let df = this.props.data;
 
       if(df.length == 0){
@@ -84,7 +87,7 @@ class LineChart extends Component {
       let width = svgWidth - margin.left - margin.right;
       let height = svgHeight - margin.top - margin.bottom;
 
-      // Find Data Range
+      // Data Range
       let xRanges = [];
       let yRanges = [];
       
@@ -103,24 +106,19 @@ class LineChart extends Component {
          yRange = extent(yRanges);
       }
       
-      // Set XY Scales
-      let x = scaleTime();
+      // XY Scales
+      let x = scaleTime().rangeRound([0, width]);
       x.domain(xRange);
-      x.range(yRange);
 
       let y = scaleLinear().rangeRound([height, 0]);
       y.domain(yRange);
-
-      // Create line generator
-      let lineGenerator = line()
-      .x(function(d){ return x(new Date(d.X, 1, 1)); })
-      .y(function(d){ return y(d.Y); });
-
-      // Append Elements to DOM
-      let g = this.drawSVG(svgWidth, svgHeight, margin, x, y)
       
+      let lineGenerator = line()
+         .x(function(d){ return x(new Date(d.X, 1, 1)); })
+         .y(function(d){ return y(d.Y); });
+      
+      let g = this.drawSVG(svgWidth, svgHeight, margin, x, y)
       this.addLines(g, df, lineGenerator);
-
    }
 
    createLinearChart(svgWidth, svgHeight) {
@@ -136,7 +134,7 @@ class LineChart extends Component {
       let width = svgWidth - margin.left - margin.right;
       let height = svgHeight - margin.top - margin.bottom;
 
-      // Data Range
+      // Capture Data Range
       let xRanges = [];
       let yRanges = [];
       
@@ -154,9 +152,7 @@ class LineChart extends Component {
          xRange = extent(xRanges);
          yRange = extent(yRanges);
       }
-      
-      
-      
+
       // XY Scales
       let x = scaleLinear().rangeRound([0, width]);
       x.domain(xRange);
@@ -183,4 +179,5 @@ render() {
       )
    }
 }
+
 export default LineChart;
