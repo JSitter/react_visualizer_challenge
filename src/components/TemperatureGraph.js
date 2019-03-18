@@ -13,8 +13,6 @@ class TemperatureGraph extends Component {
   };
 
   componentDidUpdate(){
-    // Only clean data if it exists
-    console.log(this.props.temperatureData)
     if ('Mean' in this.props.temperatureData[0]){
       if(this.state.filteredData.length == 0){
         let cleaner = new CleanDF(this.props.temperatureData, 'Year')
