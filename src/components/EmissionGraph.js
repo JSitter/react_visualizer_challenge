@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import LineChart from './LineChart';
+import CleanDF from '../helpers/cleaning';
+// import LoadingIndicator from './LoadingIndicator';
 
 class EmissionGraph extends Component {
   constructor(props){
@@ -16,51 +18,42 @@ class EmissionGraph extends Component {
   }
 
   componentDidUpdate(){
-
-    // Only clean data if new
-    if ('Year' in this.props.emissionData[0]){
-      if ('Year' in this.firstElement ){
-        if (this.firstElement.Year != this.props.emissionData[0].Year){
-          let cleaned = this.cleanData(this.props.emissionData)
-          this.setState({'filteredData': cleaned})
-          this.firstElement = this.props.emissionData[0]
-        };
-      } else {
-        let cleaned = this.cleanData(this.props.emissionData)
-        this.setState({filteredData: cleaned})
-        this.firstElement = this.props.emissionData[0]
-      };
+    // Only clean data if it exists
+    if ('Solid Fuel' in this.props.emissionData[0]){
+      if(this.state.filteredData.length == 0){
+        let cleaner = new CleanDF(this.props.emissionData, 'Year')
+        let df = cleaner.cleanData();
+        this.setState({'filteredData': df});
+      }
     };
-    
-  };
-
-  cleanData(){
-    let data = this.props.emissionData;
-
-    // Remove NaN's from Dataset
-    let filteredData = []
-    if (data.length>0){
-       data.forEach((d)=>{
-          if (!isNaN(d.Year) || !isNaN(d.Total))
-             filteredData.push({'X':d.Year, 'Y':d.Total});
-       });
-    };
-    return filteredData;
   };
 
   render(){
-    return (
-      <section id="main">
-        <h2>Emissions</h2>
-        <LineChart 
-          data={this.state.filteredData} 
-          xSize={this.props.graphWidth} 
-          ySize={this.props.graphHeight} 
-          xAxisText={'Total Carbon in Million Metric Tons'}
-          time-plot={true}
-        />
-      </section>
-    );
+    if(this.state.filteredData.length > 0){
+      return (
+        <section id="main">
+          <h2>Emissions</h2>
+          <LineChart 
+            data={this.state.filteredData} 
+            xSize={this.props.graphWidth} 
+            ySize={this.props.graphHeight} 
+            xAxisText={'Total Carbon in Million Metric Tons'}
+            time-plot={true}
+          />
+        </section>
+      );
+    }else{
+      return (
+        <section id="main">
+          <h2>Emissions</h2>
+          <div class="progress">
+            <h2>Awaiting Data from Servers....</h2>
+            <div class="indeterminate"></div>
+          </div>
+        </section>
+      );
+    }
+
   };
 };
 
