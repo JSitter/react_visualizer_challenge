@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import LineChart from './LineChart';
 import CleanDF from '../helpers/cleaning';
+import LoadingIndicator from './LoadingIndicator';
 
 class TemperatureGraph extends Component {
   constructor(props){
@@ -41,10 +42,7 @@ class TemperatureGraph extends Component {
   return (
     <section id="main">
       <h2>Emissions</h2>
-      <div class="progress">
-        <h2>Awaiting Data from Servers....</h2>
-        <div class="indeterminate"></div>
-      </div>
+      <LoadingIndicator/>
     </section>
   )
   }
