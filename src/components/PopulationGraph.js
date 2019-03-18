@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import LineChart from './LineChart';
-import { isNullOrUndefined } from 'util';
-import { isNull } from 'util';
+import CleanDF from '../helpers/cleaning';
 
 class PopulationGraph extends Component {
   constructor(props){
@@ -9,69 +8,44 @@ class PopulationGraph extends Component {
     this.state = {
       'filteredData': []
     };
-    this.firstElement = {};
   };
 
   componentDidUpdate(){
-    // Only clean data if new
+    // Only clean data if it exists
     if ('Average' in this.props.populationData[0]){
-      console.log("Retrieved population data:",this.props.populationData);
-      if ('Average' in this.firstElement ){
-        if (this.firstElement.Average != this.props.populationData[0].Average){
-          let cleaned = this.cleanData(this.props.populationData[0]);
-          this.setState({'filteredData': cleaned});
-          this.firstElement = this.props.populationData[0];
-        };
-      } else {
-        let cleaned = this.cleanData(this.props.populationData[0]);
-        this.setState({filteredData: cleaned});
-        this.firstElement = this.props.populationData[0];
-      };
+      if(this.state.filteredData.length == 0){
+        let cleaner = new CleanDF(this.props.populationData, 'Year')
+        let df = cleaner.cleanData();
+        this.setState({'filteredData': df});
+      }
+        
     };
-    
   };
-
-  cleanData(){
-    let data = this.props.populationData;
-    let xColumnName = 'Year';
-    let yColumnName = 'Average';
-
-    let filteredData = []
-    let lines = {}
-
-    let pilferedData = data.map(row => {
-      Object.keys(row).forEach((key)=>{
-        if (!(key == xColumnName) && !isNullOrUndefined(row[xColumnName]) && !isNaN(row[key]) && !isNullOrUndefined(row[key])){
-          
-            if (lines.hasOwnProperty(key)){
-              lines[key].push({'X':row[xColumnName], 'Y':row[key]})
-            }else{
-              lines[key] = [{'X':row[xColumnName], 'Y':row[key]}]
-            }
-        }
-      })
-      if ((!isNaN(row[xColumnName]) && !isNullOrUndefined(row[xColumnName])) && ( row[yColumnName] != '0'))
-        
-        return {'X':row[xColumnName], 'Y':row[yColumnName]}
-        
-    } );
-    console.log("Line Data: {}", lines);
-    return lines['Average'];
-  }
 
   render(){
-    return (
-      <section id="main">
-        <h2>Population over Time</h2>
-        <LineChart 
-          data={this.state.filteredData} 
-          xSize={this.props.graphWidth} 
-          ySize={this.props.graphHeight} 
-          xAxisText={'Number of People in Millions'}
-        />
-      </section>
-    );
-  };
+    if(this.state.filteredData.length > 0){
+      return (
+        <section id="main">
+          <h2>Population over Time</h2>
+          <LineChart 
+            data={this.state.filteredData} 
+            xSize={this.props.graphWidth} 
+            ySize={this.props.graphHeight} 
+            xAxisText={'Number of People in Millions'}
+          />
+        </section>
+      );
+  }
+  return (
+    <section id="main">
+      <h2>Emissions</h2>
+      <div class="progress">
+        <h2>Awaiting Data from Servers....</h2>
+        <div class="indeterminate"></div>
+      </div>
+    </section>
+  );
+  }
 };
 
 export default PopulationGraph;   
